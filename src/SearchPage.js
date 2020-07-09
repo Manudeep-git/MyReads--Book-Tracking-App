@@ -60,6 +60,7 @@ class SearchPage extends React.Component{
                     	  	book={book}
                           books={books}
                           key={book.id}
+													changeShelf={changeShelf}
 											/>
                    ))
               }

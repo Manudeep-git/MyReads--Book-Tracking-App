@@ -7,9 +7,10 @@ function BooksShelf(props){// stateless functional component
       <ol className='books-grid'>
       {shelfBooks.map(book =>
     		<Book
-              book={book}
+            book={book}
         	  books={shelfBooks}
         	  key={book.id}
+            changeShelf={changeShelf}
         />
     	 )
       }

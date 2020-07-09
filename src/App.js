@@ -6,12 +6,6 @@ import HomePage from './HomePage'
 
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
     books: [],
     showSearchPage: false
   }
@@ -25,22 +19,36 @@ class BooksApp extends React.Component {
             })
         })
   }
-  
+
+ // handles shelf change in homepage as well as searchPage
+  handleChangeShelf = (updatedBook,newShelf) =>{
+  	  BooksAPI.update(updatedBook,newShelf)
+      	.then(response => {
+            updatedBook.shelf=newShelf
+      		this.setState(currState => ({
+            	books: updatedBook.shelf!=='none'?
+              ([...currState.books.filter(book => book.id !== updatedBook.id),updatedBook])
+              :
+              ([...currState.books.filter(book => book.id !== updatedBook.id)])
+            }))
+      })
+  }
+
 
   render() {
     console.log(this.state.books)
 	console.log(BooksAPI.headers)
     return (
       <div className="app">
-        {this.state.showSearchPage ? 
+        {this.state.showSearchPage ?
        (
-       		<SearchPage books={this.state.books}/>
+       		<SearchPage books={this.state.books} changeShelf={this.handleChangeShelf}/>
         ) : (
           <div className="list-books">
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
-          	<HomePage books={this.state.books} />
+          	<HomePage books={this.state.books} changeShelf={this.handleChangeShelf} />
 			<div className="open-search">
               <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
             </div>

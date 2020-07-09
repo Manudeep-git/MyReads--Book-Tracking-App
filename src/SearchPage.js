@@ -6,7 +6,7 @@ import * as BooksAPI from './BooksAPI'
 class SearchPage extends React.Component{
 	state ={
     	query: '',
-        newBooks : []
+      newBooks : []
     }
 
 	updateQuery = (query) => {
@@ -15,7 +15,7 @@ class SearchPage extends React.Component{
         })
       	this.searchResults(query)
     }
-	
+
 	clearQuery = () => {
     	this.updateQuery('')
     }
@@ -28,39 +28,42 @@ class SearchPage extends React.Component{
           })
         })
     }
-  
+
 	render(){
       	const{query, newBooks}=this.state
-      	const{books}=this.props
+      	const{books,changeShelf}=this.props
 		const showBooks = query === ''? books:newBooks
 	  return (
         <div className="search-books">
           <div className="search-books-bar">
              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
               <div className="search-books-input-wrapper">
-                <input type="text" value={query} placeholder="Search by title or author" onChange={event => this.updateQuery(event.target.value)}/>
+                <input
+										type="text"
+										value={query} placeholder="Search by title or author"
+										onChange={event => this.updateQuery(event.target.value)}/>
               </div>
             </div>
 
             <div className="search-books-results">
-			 {query === ''? (<div className='display-count'>{"Showing Books in Shelf"}</div>): (
+			 						{query === ''? (<div className='display-count'>{"Showing Books in Shelf"}</div>): (
                   	  <div className="display-count">
                   			<span>Search Returned {newBooks.length} books.</span>
 							<button onClick={this.clearQuery}>New Search</button>
                   	  </div>
                   )}
 
-              <ol className="books-grid">
-				 {/*To keep interface consistent displaying shelf books if no search is made*/}
-				{ showBooks.map(book => (
+            <ol className="books-grid">
+				 			{/*To keep interface consistent displaying shelf books if no search is made*/}
+							{showBooks.map(book => (
                   		<Book
-                    	  book={book}
+                    	  	book={book}
                           books={books}
                           key={book.id}
-						/>
+											/>
                    ))
-                }
-			 </ol>
+              }
+			 			</ol>
           </div>
         </div>
         );

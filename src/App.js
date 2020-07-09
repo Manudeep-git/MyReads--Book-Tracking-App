@@ -26,11 +26,6 @@ class BooksApp extends React.Component {
         })
   }
   
-  changePage = () =>{
-  	this.setState(currState => ({
-    	showSearchPage: !currState.showSearchPage,
-    }))
-  }
 
   render() {
     console.log(this.state.books)
@@ -39,9 +34,17 @@ class BooksApp extends React.Component {
       <div className="app">
         {this.state.showSearchPage ? 
        (
-       		<SearchPage books={this.state.books} />
+       		<SearchPage books={this.state.books}/>
         ) : (
-          	<HomePage onChangePage={this.changePage}/>
+          <div className="list-books">
+            <div className="list-books-title">
+              <h1>MyReads</h1>
+            </div>
+          	<HomePage books={this.state.books} />
+			<div className="open-search">
+              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+            </div>
+		  </div>
           )}
       </div>
     )

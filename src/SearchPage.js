@@ -1,10 +1,15 @@
 import React from 'react'
-//import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import Book from './Book'
 import * as BooksAPI from './BooksAPI'
 import {Link} from 'react-router-dom'
 
 class SearchPage extends React.Component{
+	static propTypes = {
+      books: PropTypes.array.isRequired,
+  	  changeShelf: PropTypes.func.isRequired
+    }
+
 	state ={
     	query: '',
         newBooks : []
@@ -20,7 +25,7 @@ class SearchPage extends React.Component{
 	clearQuery = () => {
     	this.updateQuery('')
     }
-
+	//search method from BooksApi is used to return newBooks
 	searchResults = (query) => {
         BooksAPI.search(query,20)
           .then(books => {
@@ -39,38 +44,38 @@ class SearchPage extends React.Component{
           <div className="search-books-bar">
              <Link to='/' className="close-search" >Close</Link>
               <div className="search-books-input-wrapper">
+        		{/*Controlled Component for input*/ }
                 <input type="text"
-					   value={query}
-					   placeholder="Search by title or author"
-					   onChange={event => this.updateQuery(event.target.value)}
-				/>
+					   					 value={query}
+					   			 		 placeholder="Search by title or author"
+					   			 	   onChange={event => this.updateQuery(event.target.value)}
+						 		/>
               </div>
-            </div>
-
-            <div className="search-books-results">
-			 {query === ''?
-              (<div className='display-count'>{"Showing Books in Shelf"}</div>)
-					:
-					(
+          </div>
+			{/* appropriate messages for search returned books or shelf books*/ }
+          <div className="search-books-results">
+			 	 		 {query === ''?
+              (<div className='display-count'>{"Showing Books in Shelf"}</div>):
+										(
                   	  <div className="display-count">
-                  			<span>Search Returned {newBooks.length} books.</span>
-							<button onClick={this.clearQuery}>New Search</button>
+                  				<span>Search Returned {newBooks.length} books.</span>
+													<button onClick={this.clearQuery}>New Search</button>
                   	  </div>
                   	)
-			 }
+			 			 }
 
               <ol className="books-grid">
-				 {/*To keep interface consistent displaying shelf books if no search is made*/}
-				{ showBooks.map(book => (
+				 				{/*To keep interface consistent displaying shelf books if no search is made*/}
+								{showBooks.map(book => (
                   		<Book
-                    	  book={book}
+                    	  	book={book}
                           books={books}
                           key={book.id}
-						  changeShelf={changeShelf}
-						/>
+						  					  changeShelf={changeShelf}
+											/>
                    ))
                 }
-			 </ol>
+			 				</ol>
           </div>
         </div>
         );

@@ -1,5 +1,6 @@
 import React from 'react'
 import BooksShelf from './BooksShelf'
+import PropTypes from 'prop-types'
 
 function HomePage(props){//stateless component
   const {books,changeShelf}=props
@@ -12,13 +13,14 @@ function HomePage(props){//stateless component
 
   return (
     <div className="list-books-content">
+    	{/*Filtering books based on the shelf and passing on to book component*/ }
     	{shelfTypes.map((shelf,index)=> {
   			const shelfBooks = books.filter(book => book.shelf===shelf.type)
             return (
             	<div className='bookshelf' key={index}>
               	   <h2 className='bookshelf-title'>{shelf.title}</h2>
                   <div className='bookshelf-books'>
-                    <BooksShelf shelfBooks={shelfBooks} changeShelf={changeShelf} />
+                    <BooksShelf shelfBooks={shelfBooks} changeShelf={changeShelf}/>
                   </div>
   				</div>
             )
@@ -26,5 +28,10 @@ function HomePage(props){//stateless component
     </div>
   )
 }
+// since it is a stateless functional component, add required propTypes here
+HomePage.propTypes = {
+  books: PropTypes.array.isRequired,
+  changeShelf: PropTypes.func.isRequired
+};
 
 export default HomePage

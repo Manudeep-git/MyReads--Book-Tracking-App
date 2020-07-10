@@ -3,11 +3,12 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 import SearchPage from './SearchPage'
 import HomePage from './HomePage'
+import {Route} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 class BooksApp extends React.Component {
   state = {
     books: [],
-    showSearchPage: false
   }
 
  // gets called as soon as render method is invoked
@@ -26,34 +27,36 @@ class BooksApp extends React.Component {
       	.then(response => {
             updatedBook.shelf=newShelf
       		this.setState(currState => ({
-            	books: updatedBook.shelf!=='none'?
-              ([...currState.books.filter(book => book.id !== updatedBook.id),updatedBook])
-              :
-              ([...currState.books.filter(book => book.id !== updatedBook.id)])
+            	books: updatedBook.shelf!=='none'?([...currState.books.filter(book => book.id !== updatedBook.id),updatedBook])
+              			: ([...currState.books.filter(book => book.id !== updatedBook.id)])
             }))
       })
   }
 
 
   render() {
-    console.log(this.state.books)
-	console.log(BooksAPI.headers)
+    //console.log(this.state.books)
+	//console.log(BooksAPI.headers)
     return (
       <div className="app">
-        {this.state.showSearchPage ?
-       (
-       		<SearchPage books={this.state.books} changeShelf={this.handleChangeShelf}/>
-        ) : (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-          	<HomePage books={this.state.books} changeShelf={this.handleChangeShelf} />
-			<div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
-            </div>
-		  </div>
-          )}
+        <Route
+      		path='/search'
+      		render={() => (
+       		<SearchPage books={this.state.books} changeShelf={this.handleChangeShelf} />
+	      )}
+		    />
+    		<Route exact path='/' render={() => (
+              <div className="list-books">
+                <div className="list-books-title">
+                  <h1>MyReads</h1>
+                </div>
+              	<HomePage books={this.state.books} changeShelf={this.handleChangeShelf} />
+    			      <div className="open-search">
+                  <Link to='/search'>Add a book</Link>
+                </div>
+    		      </div>
+              )}
+    		/>
       </div>
     )
   }
